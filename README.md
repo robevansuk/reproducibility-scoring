@@ -1,0 +1,1 @@
+some text for measuring lexicographical diversity
