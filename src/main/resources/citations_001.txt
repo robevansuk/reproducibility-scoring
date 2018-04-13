@@ -1,0 +1,16 @@
+TY  - JOUR
+AU  - Valencia Garcia, Sara
+AU  - Fort, Patrice
+TI  - Nucleus Accumbens, a new sleep-regulating area through the integration of motivational stimuli
+JO  - Acta Pharmacologica Sinica
+PY  - 2018/12/28/online
+VL  - 39
+SP  - 165
+EP  -
+PB  - CPS and SIMM
+SN  -
+UR  - http://dx.doi.org/10.1038/aps.2017.168
+L3  - 10.1038/aps.2017.168
+M3  - Research Highlight
+L3  -
+ER  -

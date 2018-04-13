@@ -1,30 +1,13 @@
-import play.api.libs.json.Json
-import scalaj.http.Http
 
 
 object Analyser {
 
-
-  def articles() = {
-    val domain = "all"
-    val client = "reproducibilityHack"
-
-    val hubapiarticles = s"http://hub-api.live.cf.private.springer.com/api/v1/articles?page=1&pageSize=10&domain=${domain}&client=${client}"
-
-    val request = Http(hubapiarticles)
-    val result = request.execute()
-    val jsonResponse = Json.parse(result.body.toString)
-    val articleTitles = jsonResponse \ "articles" \\ "title"
-
-    for (articleTitle <- articleTitles) {
-      val articleTitleAsArray = articleTitle.toString().replace("\"","").split(" ").toList
-      val lexicalDiversityScore = getLexicalDiversity(articleTitleAsArray)
-      println (s"$lexicalDiversityScore -> $articleTitle")
-    }
-
-    articleTitles
+  def getLexicalDiversity(data : String): String = {
+    val noDashes = data.replace("-", " ")
+    val noPunctuation = noDashes.replaceAll("""[^a-zA-Z0-9\s]""", "")
+    val lowerCaseData = noPunctuation.toLowerCase
+    lexicalDiversityScore(lowerCaseData.split(" ").toList, getWords(lowerCaseData.split(" ").toList)).toString
   }
-
 
   def getWords(data : List[String]): Map[String, Int] = {
 
@@ -36,14 +19,17 @@ object Analyser {
       case _ => map
     }
 
-    loop(Map.empty, data)
-  }
-
-  def lexicalDiversityScore(data: List[String], wordFrequencyMap: Map[String, Int]): Double = {
-        data.size / wordFrequencyMap.size
+    val result = loop(Map.empty, data)
+//    println (result)
+    result
   }
 
   def getLexicalDiversity(data : List[String]): String = {
-     lexicalDiversityScore(data, getWords(data)).toString
+    lexicalDiversityScore(data, getWords(data))
   }
+
+  def lexicalDiversityScore(data: List[String], wordFrequencyMap: Map[String, Int]): String = {
+    BigDecimal(wordFrequencyMap.size)./(data.size).setScale(3, BigDecimal.RoundingMode.HALF_UP).toString()
+  }
+
 }
